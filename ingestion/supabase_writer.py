@@ -24,17 +24,21 @@ def run_pipeline():
     
     for city, coords in CITIES.items():
         try:
-            print(f"--- Extraction : {city} ---")
+            print(f"--- Ville : {city.upper()} ---")
             weather_data = fetch_weather_archive(city, coords["lat"], coords["lon"])
+            nb_lignes = len(weather_data)
             
-            print(f"--- Ingestion : {city} ---")
+            print(f"Extraction : {nb_lignes} lignes récupérées.")
+            print(f"Ingestion en cours...")
+            
             ingest_data(supabase, "raw_weather", weather_data)
             
-            print(f"✅ {city} terminé.")
+            print(f"Succès : {city} est en base.")
+            print("Attente de sécurité (5s)...")
             time.sleep(5)
             
         except Exception as e:
-            print(f"❌ Erreur sur {city} : {e}")
+            print(f"Erreur sur {city} : {e}")
             time.sleep(10)
 
 if __name__ == "__main__":
